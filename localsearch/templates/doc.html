@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ doc.get('name') }} — LocalSearch</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="hero small">
+    <a class="logo" href="/">Local<span>Search</span></a>
+  </header>
+  <main>
+    <h2 class="doc-title">{{ doc.get('title') or doc.get('name') }}</h2>
+    <table class="doc-meta">
+      <tr><th>Путь</th><td>{{ doc.get('path') }}</td></tr>
+      <tr><th>Расширение</th><td>{{ doc.get('extension') }}</td></tr>
+      <tr><th>Размер</th><td>{{ doc.get('size_human') }}</td></tr>
+      <tr><th>Создан</th><td>{{ doc.get('created_iso') }}</td></tr>
+      <tr><th>Изменён</th><td>{{ doc.get('modified_iso') }}</td></tr>
+      <tr><th>Кодировка</th><td>{{ doc.get('encoding') }}</td></tr>
+      <tr><th>Автор</th><td>{{ doc.get('author') or '—' }}</td></tr>
+    </table>
+    <h3>Извлечённый текст</h3>
+    <pre class="doc-text">{{ text or '(текст не извлечён)' }}</pre>
+    <p><a href="javascript:history.back()">← к результатам</a></p>
+  </main>
+</body>
+</html>
