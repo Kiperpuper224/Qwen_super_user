@@ -1,0 +1,72 @@
+/* LocalSearch — минималистичный «браузерный» стиль */
+:root {
+  --accent: #1a73e8;
+  --bg: #ffffff;
+  --fg: #202124;
+  --muted: #5f6368;
+  --line: #dadce0;
+  --mark: #fff3b0;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 15px/1.5 "Segoe UI", Roboto, Arial, sans-serif;
+}
+.hero { max-width: 680px; margin: 8vh auto 24px; padding: 0 16px; text-align: center; }
+.hero.small { margin: 24px auto; text-align: left; }
+.logo { font-size: 34px; font-weight: 600; letter-spacing: -1px; color: var(--fg); text-decoration: none; }
+.logo span { color: var(--accent); }
+.searchbox { display: flex; margin-top: 18px; border: 1px solid var(--line); border-radius: 24px;
+  overflow: hidden; box-shadow: 0 1px 6px rgba(32,33,36,.12); }
+.searchbox:hover, .searchbox:focus-within { box-shadow: 0 2px 10px rgba(32,33,36,.22); }
+.searchbox input { flex: 1; border: 0; outline: 0; padding: 12px 18px; font-size: 16px; }
+.searchbox button { border: 0; background: var(--accent); color: #fff; padding: 0 26px;
+  font-size: 15px; cursor: pointer; }
+.help { text-align: left; margin-top: 10px; color: var(--muted); font-size: 13px; }
+.help code { background: #f1f3f4; padding: 1px 5px; border-radius: 4px; }
+
+.crawler-panel { max-width: 680px; margin: 0 auto 28px; padding: 12px 16px;
+  border: 1px solid var(--line); border-radius: 10px; background: #fafafa; }
+.crawler-controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.crawler-controls input[type=text] { flex: 1; min-width: 220px; padding: 8px 10px;
+  border: 1px solid var(--line); border-radius: 6px; }
+.crawler-controls label { color: var(--muted); font-size: 13px; }
+.crawler-controls input[type=number] { width: 56px; padding: 6px; border: 1px solid var(--line);
+  border-radius: 6px; }
+.btn { border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 8px 14px;
+  cursor: pointer; font-size: 14px; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.danger { color: #d93025; }
+.btn:disabled { opacity: .5; cursor: default; }
+.progress-wrap { margin-top: 10px; }
+.progress-bar { height: 8px; background: #e8eaed; border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, #34a853, var(--accent));
+  transition: width .3s ease; }
+.progress-text { margin-top: 6px; font-size: 12px; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+main { max-width: 680px; margin: 0 auto; padding: 0 16px 40px; }
+.meta-line { color: var(--muted); font-size: 13px; }
+.error { color: #d93025; background: #fce8e6; padding: 10px 14px; border-radius: 8px; }
+.results { list-style: none; padding: 0; }
+.result { margin-bottom: 26px; }
+.result .title { color: var(--accent); font-size: 18px; text-decoration: none; }
+.result .title:hover { text-decoration: underline; }
+.result .url { color: #0d652d; font-size: 13px; word-break: break-all; }
+.result .snippet { margin: 4px 0 6px; }
+mark { background: var(--mark); padding: 0 2px; border-radius: 2px; }
+.badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.badge { font-size: 11px; color: var(--muted); background: #f1f3f4;
+  border-radius: 10px; padding: 2px 8px; }
+.badge.score { background: #e8f0fe; color: var(--accent); }
+.pager { display: flex; gap: 18px; margin-top: 20px; }
+.pager a { color: var(--accent); text-decoration: none; }
+.empty { color: var(--muted); }
+
+.doc-title { word-break: break-all; }
+.doc-meta { border-collapse: collapse; font-size: 14px; margin-bottom: 18px; }
+.doc-meta th, .doc-meta td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; }
+.doc-meta th { background: #f8f9fa; color: var(--muted); font-weight: 500; }
+.doc-text { background: #f8f9fa; border: 1px solid var(--line); border-radius: 8px;
+  padding: 14px; white-space: pre-wrap; word-break: break-word; max-height: 60vh; overflow: auto; }
+footer { text-align: center; color: var(--muted); font-size: 12px; padding: 24px 0; }

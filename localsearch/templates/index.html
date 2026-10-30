@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LocalSearch — поиск по файлам</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="logo">Local<span>Search</span></div>
+    <form id="search-form" action="/search" method="get" autocomplete="off">
+      <div class="searchbox">
+        <input id="q" name="q" type="text" placeholder='Запрос: слова, "фраза", regex:\d+, ext:pdf, after:2024-01-01'
+               value="{{ query or '' }}" autofocus>
+        <button type="submit">Найти</button>
+      </div>
+      <details class="help">
+        <summary>Синтаксис поиска</summary>
+        <ul>
+          <li><code>слово1 слово2</code> — точные слова (BM25)</li>
+          <li><code>"точная фраза"</code> — поиск фразы и входящих предложений</li>
+          <li><code>regex:py\w+on</code> — регулярное выражение</li>
+          <li><code>ext:pdf</code>, <code>name:отчёт</code>, <code>author:иван</code></li>
+          <li><code>after:2024-01-01</code>, <code>before:2026-01-01</code></li>
+          <li><code>minsize:1kb</code>, <code>maxsize:5mb</code>, <code>-термин</code> — исключить</li>
+        </ul>
+      </details>
+    </form>
+  </header>
+
+  <!-- Панель краулера с индикатором прогресса -->
+  <section class="crawler-panel" id="crawler-panel">
+    <div class="crawler-controls">
+      <input id="crawl-target" type="text" placeholder="Путь к папке или https://url">
+      <label>Глубина <input id="crawl-depth" type="number" min="0" max="10" value="3"></label>
+      <button id="btn-crawl" class="btn primary">Сканировать</button>
+      <button id="btn-stop" class="btn danger" disabled>Стоп</button>
+      <button id="btn-save" class="btn">Сохранить индекс</button>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+      <div id="progress-text" class="progress-text">Краулер: ожидание</div>
+    </div>
+  </section>
+
+  <main>
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if stats is defined and stats %}
+      <p class="meta-line">В индексе: {{ stats.documents }} документов ·
+        терминов: {{ stats.terms }}{% if elapsed_ms %} · поиск за {{ '%.1f'|format(elapsed_ms) }} мс{% endif %}</p>
+    {% endif %}
+
+    {% if query %}
+      {% if hits %}
+        <p class="meta-line">Найдено совпадений: {{ total_found }}. Страница {{ page }}.</p>
+        <ol class="results">
+          {% for h in hits %}
+          <li class="result">
+            <a class="title" href="/doc/{{ h.doc_id }}">{{ h.meta.get('title') or h.meta.get('name') }}</a>
+            <div class="url">{{ h.meta.get('path') }}</div>
+            <div class="snippet">{{ h.snippet_html | safe }}</div>
+            <div class="badges">
+              <span class="badge">{{ h.meta.get('extension','?')|upper }}</span>
+              <span class="badge">{{ h.meta.get('size_human') }}</span>
+              {% if h.meta.get('modified_iso') %}<span class="badge">изм. {{ h.meta.get('modified_iso') }}</span>{% endif %}
+              {% if h.meta.get('encoding') %}<span class="badge">{{ h.meta.get('encoding') }}</span>{% endif %}
+              {% if h.meta.get('author') %}<span class="badge">✍ {{ h.meta.get('author') }}</span>{% endif %}
+              <span class="badge score">score {{ '%.2f'|format(h.score) }}</span>
+            </div>
+          </li>
+          {% endfor %}
+        </ol>
+        <nav class="pager">
+          {% if page > 1 %}<a href="/search?q={{ query|urlencode }}&page={{ page-1 }}">← назад</a>{% endif %}
+          {% if page * per_page < total_found %}<a href="/search?q={{ query|urlencode }}&page={{ page+1 }}">вперёд →</a>{% endif %}
+        </nav>
+      {% else %}
+        <p class="empty">Ничего не найдено по запросу <b>{{ query }}</b>.
+           Убедитесь, что папка просканирована (панель выше).</p>
+      {% endif %}
+    {% endif %}
+  </main>
+
+  <footer>localsearch v{{ version }} · локальный поиск без отправки данных наружу</footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>
